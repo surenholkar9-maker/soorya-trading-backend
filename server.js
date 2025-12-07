@@ -36,7 +36,7 @@ app.post('/api/token', async (req, res) => {
             {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
-                                'Accept': 'application/json'
+                                'Accept': 'application/json',
                 }
             }
         );
