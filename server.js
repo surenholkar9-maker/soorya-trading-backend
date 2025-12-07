@@ -36,11 +36,14 @@ app.post('/api/token', async (req, res) => {
             {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
+                                'Accept': 'application/json'
                 }
             }
         );
+            console.log('Token exchange response:', response.data);
         res.json(response.data);
-    } catch (error) {
+    
+        console.error('Token exchange error:', error);} catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
