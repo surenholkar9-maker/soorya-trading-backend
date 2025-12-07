@@ -65,6 +65,48 @@ app.post('/api/place-order', async (req, res) => {
     }
 });
 
+// Fetch portfolio (holdings) for authenticated user
+app.get('/api/portfolio', async (req, res) => {
+  const { token } = req.query;
+  try {
+    const response = await axios.get(
+      'https://api.upstox.com/v2/portfolio/long-term-holdings',
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json'
+        }
+      }
+    );
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Fetch live market data for instrument
+app.get('/api/market-data', async (req, res) => {
+  const { token, instrumentKeys } = req.query;
+  try {
+    const response = await axios.get(
+      'https://api.upstox.com/v2/market-quote/quotes/?mode=LTP',
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json'
+        },
+        params: {
+          'instrument_key': instrumentKeys
+        }
+      }
+    );
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Backend running on port ${PORT}`);
