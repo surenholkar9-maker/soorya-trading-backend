@@ -3,7 +3,13 @@
   "functions": {
     "api/**/*.js": {
       "memory": 1024,
-      "maxDuration": 10
+      "maxDuration": 30
     }
-  }
+  },
+  "routes": [
+    {
+      "src": "^/api/upstox/auth",
+      "dest": "/api/upstox/auth/index.js"
+    }
+  ]
 }
