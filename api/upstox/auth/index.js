@@ -57,15 +57,8 @@ module.exports = async (req, res) => {
 
     const { access_token, token_type, expires_in } = tokenResponse.data;
 
-    // Return success response with token
-    return res.status(200).json({
-      success: true,
-      accessToken: access_token,
-      tokenType: token_type,
-      expiresIn: expires_in,
-      message: 'Authentication successful'
-    });
-
+// Redirect to frontend with token
+res.redirect(`https://surenholkar9-maker.github.io/soorya-trading/?access_token=${access_token}&token_type=${token_type}&expires_in=${expires_in}&status=success`);
   } catch (error) {
     console.error('Error in Upstox auth callback:', error.message);
 
