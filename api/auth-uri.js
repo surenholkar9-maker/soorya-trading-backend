@@ -12,32 +12,31 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const UPSTOX_API_KEY = process.env.UPSTOX_API_KEY;
-    const REDIRECT_URI = process.env.REDIRECT_URI;
+    // CHANGE THIS: Use UPSTOX_CLIENT_ID (not UPSTOX_API_KEY)
+    const UPSTOX_CLIENT_ID = process.env.UPSTOX_CLIENT_ID;
+    
+    // IMPORTANT: Use the exact redirect URI that matches Upstox console
+    const REDIRECT_URI = 'https://soorya-trading-backend.vercel.app/api/token';
 
     // Validate environment variables
-    if (!UPSTOX_API_KEY) {
+    if (!UPSTOX_CLIENT_ID) {
       return res.status(500).json({
         success: false,
-        error: 'API key not configured',
-        message: 'Please add UPSTOX_API_KEY to environment variables'
+        error: 'Client ID not configured',
+        message: 'Please add UPSTOX_CLIENT_ID to environment variables'
       });
     }
 
-    if (!REDIRECT_URI) {
-      return res.status(500).json({
-        success: false,
-        error: 'Redirect URI not configured',
-        message: 'Please add REDIRECT_URI to environment variables'
-      });
-    }
+    // FIXED: Use correct Upstox API endpoint and parameters
+    const authUrl = `https://api.upstox.com/v2/login/authorization/dialog?response_type=code&client_id=${UPSTOX_CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
 
-    // Construct the authorization URL
-    const authUrl = `https://api.upstox.com/v2/login/authorization?response_type=code&client_id=${UPSTOX_API_KEY}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
+    console.log('Generated auth URL for client:', UPSTOX_CLIENT_ID.substring(0, 10) + '...');
+    console.log('Redirect URI:', REDIRECT_URI);
 
     res.status(200).json({
       success: true,
       authUrl: authUrl,
+      redirectUri: REDIRECT_URI,
       message: 'Authorization URL generated successfully'
     });
   } catch (error) {
