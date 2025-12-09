@@ -16,7 +16,8 @@ module.exports = async (req, res) => {
     const UPSTOX_CLIENT_ID = process.env.UPSTOX_CLIENT_ID;
     
     // IMPORTANT: Use the exact redirect URI that matches Upstox console
-    const REDIRECT_URI = 'https://soorya-trading-backend.vercel.app/api';
+    const authUrl = `https://api.upstox.com/v2/login/authorization/dialog?response_type=code&client_id=${UPSTOX_API_KEY}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
+
 
     // Validate environment variables
     if (!UPSTOX_CLIENT_ID) {
