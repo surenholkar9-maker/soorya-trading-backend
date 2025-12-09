@@ -10,6 +10,11 @@
     {
       "src": "^/api/upstox/auth",
       "dest": "/api/upstox/auth/index.js"
+          },
+        {
+                "src": "^/api/auth-uri$",
+                "dest": "/api/auth-uri.js"
+              }
     }
   ]
 }
