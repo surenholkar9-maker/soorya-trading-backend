@@ -11,10 +11,6 @@
       "src": "^/api/upstox/auth",
       "dest": "/api/upstox/auth/index.js"
           },
-        {
-                "src": "^/api/auth-url",
-                "dest": "/api/auth-lrl.js"
-              }
     }
   ]
 }
