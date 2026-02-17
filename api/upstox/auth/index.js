@@ -12,6 +12,20 @@ module.exports = async (req, res) => {
     return res.status(200).end();
   }
 
+    // Handle GET request - generate OAuth authorization URL
+    if (req.method === 'GET') {
+          const UPSTOX_AUTH_URL = 'https://api.upstox.com/v2/login/authorization/dialog';
+          const state = 'soorya_' + Math.random().toString(36).substr(2, 9);
+          const authUrl = `${UPSTOX_AUTH_URL}?client_id=${process.env.UPSTOX_API_KEY}&redirect_uri=${encodeURIComponent(process.env.REDIRECT_URI)}&response_type=code&state=${state}&scope=read%20write`;
+
+          return res.status(200).json({
+                  success: true,
+                  auth_url: authUrl,
+                  state: state,
+                  message: 'OAuth URL generated successfully'
+                        });
+        }
+
   try {
     const { code, state } = req.query;
 
