@@ -13,59 +13,59 @@ const REDIRECT_URI = process.env.REDIRECT_URI;
 
 // Get auth URL (for frontend to redirect to Upstox login)
 app.get('/api/auth-url', (req, res) => {
-    const authUrl = `https://api.upstox.com/v2/login/authorization/dialog?` +
-        `response_type=code&` +
-        `client_id=${UPSTOX_API_KEY}&` +
-        `redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
-    res.json({ authUrl });
+  const authUrl = `https://api.upstox.com/v2/login/authorization/dialog?` +
+    `response_type=code&` +
+    `client_id=${UPSTOX_API_KEY}&` +
+    `redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
+  res.json({ authUrl });
 });
 
 // Exchange code for access token (called after Upstox redirects back)
 app.post('/api/token', async (req, res) => {
-    const { code } = req.body;
-    try {
-        const response = await axios.post(
-            'https://api.upstox.com/v2/login/authorization/token',
-            new URLSearchParams({
-                code,
-                client_id: UPSTOX_API_KEY,
-                client_secret: UPSTOX_API_SECRET,
-                redirect_uri: REDIRECT_URI,
-                grant_type: 'authorization_code'
-            }),
-            {
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                                'Accept': 'application/json',
-                }
-            }
-        );
-            console.log('Token exchange response:', response.data);
-        res.json(response.data);
-    
-        console.error('Token exchange error:', error);} catch (error) {
-        res.status(500).json({ error: error.message });
-    }
+  const { code } = req.body;
+  try {
+    const response = await axios.post(
+      'https://api.upstox.com/v2/login/authorization/token',
+      new URLSearchParams({
+        code,
+        client_id: UPSTOX_API_KEY,
+        client_secret: UPSTOX_API_SECRET,
+        redirect_uri: REDIRECT_URI,
+        grant_type: 'authorization_code'
+      }),
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Accept': 'application/json'
+        }
+      }
+    );
+    console.log('Token exchange response:', response.data);
+    res.json(response.data);
+  } catch (error) {
+    console.error('Token exchange error:', error);
+    res.status(500).json({ error: error.message });
+  }
 });
 
 // Place order (example: proxy authenticated call to Upstox)
 app.post('/api/place-order', async (req, res) => {
-    const { token, orderData } = req.body;
-    try {
-        const response = await axios.post(
-            'https://api.upstox.com/v2/order/place',
-            orderData,
-            {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            }
-        );
-        res.json(response.data);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
+  const { token, orderData } = req.body;
+  try {
+    const response = await axios.post(
+      'https://api.upstox.com/v2/order/place',
+      orderData,
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 // Fetch portfolio (holdings) for authenticated user
@@ -109,8 +109,7 @@ app.get('/api/market-data', async (req, res) => {
   }
 });
 
-
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Backend running on port ${PORT}`);
+  console.log(`Backend running on port ${PORT}`);
 });
